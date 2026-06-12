@@ -33,6 +33,7 @@ export function getCOAList() {
     { countryCode: 'id', name: 'Indonesia - Chart of Accounts' },
     { countryCode: 'in', name: 'India - Chart of Accounts' },
     { countryCode: 'mx', name: 'Mexico - Plan de Cuentas' },
+    { countryCode: 'np', name: 'Nepal - Chart of Accounts' },
     { countryCode: 'ni', name: 'Nicaragua - Catalogo de Cuentas' },
     { countryCode: 'nl', name: 'Netherlands - Grootboekschema' },
     { countryCode: 'sg', name: 'Singapore - Chart of Accounts' },

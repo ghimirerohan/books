@@ -128,11 +128,17 @@ export const models = {
 export async function getRegionalModels(
   countryCode: string
 ): Promise<ModelMap> {
-  if (countryCode !== 'in') {
-    return {};
+  if (countryCode === 'in') {
+    const { Address } = await import('./regionalModels/in/Address');
+    const { Party } = await import('./regionalModels/in/Party');
+    return { Address, Party };
   }
 
-  const { Address } = await import('./regionalModels/in/Address');
-  const { Party } = await import('./regionalModels/in/Party');
-  return { Address, Party };
+  if (countryCode === 'np') {
+    const { Address } = await import('./regionalModels/np/Address');
+    const { Party } = await import('./regionalModels/np/Party');
+    return { Address, Party };
+  }
+
+  return {};
 }

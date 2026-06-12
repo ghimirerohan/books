@@ -1,0 +1,44 @@
+{
+  "name": "Address",
+  "fields": [
+    {
+      "fieldname": "province",
+      "label": "Province",
+      "fieldtype": "AutoComplete",
+      "placeholder": "Province",
+      "section": "Default"
+    },
+    {
+      "fieldname": "district",
+      "label": "District",
+      "fieldtype": "AutoComplete",
+      "placeholder": "District",
+      "section": "Default"
+    },
+    {
+      "fieldname": "localLevel",
+      "label": "Municipality / Rural Municipality",
+      "fieldtype": "Data",
+      "placeholder": "Local Level",
+      "section": "Default"
+    },
+    {
+      "fieldname": "wardNo",
+      "label": "Ward No.",
+      "fieldtype": "Data",
+      "placeholder": "Ward No.",
+      "section": "Default"
+    }
+  ],
+  "quickEditFields": [
+    "addressLine1",
+    "addressLine2",
+    "localLevel",
+    "wardNo",
+    "city",
+    "district",
+    "province",
+    "country",
+    "postalCode"
+  ]
+}

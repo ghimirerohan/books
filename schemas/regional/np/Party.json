@@ -1,0 +1,56 @@
+{
+  "name": "Party",
+  "fields": [
+    {
+      "fieldname": "registrationType",
+      "label": "Tax Registration",
+      "placeholder": "Tax Registration",
+      "fieldtype": "Select",
+      "default": "Unregistered",
+      "options": [
+        {
+          "value": "Unregistered",
+          "label": "Unregistered"
+        },
+        {
+          "value": "PAN Registered",
+          "label": "PAN Registered"
+        },
+        {
+          "value": "VAT Registered",
+          "label": "VAT Registered"
+        },
+        {
+          "value": "Consumer",
+          "label": "Consumer"
+        }
+      ],
+      "section": "Billing"
+    },
+    {
+      "fieldname": "pan",
+      "label": "PAN",
+      "fieldtype": "Data",
+      "placeholder": "123456789",
+      "section": "Billing"
+    },
+    {
+      "fieldname": "vatNo",
+      "label": "VAT Registration No.",
+      "fieldtype": "Data",
+      "section": "Billing"
+    }
+  ],
+  "quickEditFields": [
+    "email",
+    "phone",
+    "address",
+    "defaultAccount",
+    "currency",
+    "role",
+    "registrationType",
+    "pan",
+    "vatNo"
+  ],
+  "removeFields": ["taxId"]
+}
