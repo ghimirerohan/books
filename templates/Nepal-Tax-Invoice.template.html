@@ -1,0 +1,211 @@
+<main class="bg-white h-full" :style="{ 'font-family': print.font }">
+  <!-- Header: Company + Title -->
+  <header class="px-10 pt-8">
+    <section class="flex items-start justify-between">
+      <div class="flex items-center">
+        <img
+          v-if="print.displayLogo"
+          class="h-12 max-w-32 object-contain mr-4"
+          :src="print.logo"
+        />
+        <div>
+          <p class="font-semibold text-xl" :style="{ color: print.color }">
+            {{ print.companyName }}
+          </p>
+          <p class="text-sm text-gray-800" v-if="print.address">
+            {{ print.links.address.addressDisplay }}
+          </p>
+          <p class="text-sm text-gray-800" v-if="print.phone">
+            {{ print.phone }}
+          </p>
+          <p class="text-sm text-gray-800" v-if="print.pan">
+            स्थायी लेखा नं. (PAN): {{ print.pan }}
+          </p>
+          <p class="text-sm text-gray-800" v-if="print.vatNo">
+            मु.अ.कर दर्ता नं. (VAT): {{ print.vatNo }}
+          </p>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <p class="font-semibold text-lg" :style="{ color: print.color }">
+          {{ doc.entryType === 'PurchaseInvoice' ? 'खरिद बिल' : 'कर बीजक' }}
+        </p>
+        <p class="text-sm text-gray-600">
+          <span v-if="doc.entryType === 'PurchaseInvoice'">Purchase Bill</span>
+          <span v-else>Tax Invoice</span>
+        </p>
+      </div>
+    </section>
+
+    <div class="border-t border-b border-gray-300 mt-4"></div>
+  </header>
+
+  <!-- Invoice + Party meta -->
+  <section class="px-10 pt-4 flex justify-between text-sm">
+    <!-- Buyer / Supplier -->
+    <div class="w-1/2 pr-4">
+      <p class="text-gray-500 uppercase text-xs mb-1">
+        {{ doc.entryType === 'PurchaseInvoice' ? 'आपूर्तिकर्ता / Supplier' :
+        'ग्राहक / Customer' }}
+      </p>
+      <p class="font-semibold text-gray-900" v-if="doc.party">
+        {{ doc.party }}
+      </p>
+      <p
+        class="text-gray-800"
+        v-if="doc.links.party && doc.links.party.address"
+      >
+        {{ doc.links.party.links.address.addressDisplay }}
+      </p>
+      <p class="text-gray-800" v-if="doc.links.party && doc.links.party.pan">
+        PAN: {{ doc.links.party.pan }}
+      </p>
+      <p class="text-gray-800" v-if="doc.links.party && doc.links.party.vatNo">
+        VAT: {{ doc.links.party.vatNo }}
+      </p>
+    </div>
+
+    <!-- Invoice details -->
+    <div class="w-1/2 pl-4 text-right">
+      <div class="flex justify-end gap-2">
+        <span class="text-gray-500">बीजक नं. / Invoice No.:</span>
+        <span class="font-semibold text-gray-900">{{ doc.name }}</span>
+      </div>
+      <div class="flex justify-end gap-2 mt-1">
+        <span class="text-gray-500">मिति / Date:</span>
+        <span class="text-gray-900">{{ doc.date }}</span>
+        <span class="text-gray-900" v-if="doc.time">{{ doc.time }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Items Table -->
+  <section class="px-10 pt-6 text-sm">
+    <!-- Heading Row -->
+    <section
+      class="flex font-semibold text-white py-2 px-2 rounded-t"
+      :style="{ backgroundColor: print.color }"
+    >
+      <div class="w-1/12">क्र.सं.</div>
+      <div class="w-4/12">विवरण / Particulars</div>
+      <div class="w-2/12 text-right" v-if="doc.showHSN">HS Code</div>
+      <div class="w-1/12 text-right">परिमाण</div>
+      <div class="w-2/12 text-right">दर / Rate</div>
+      <div class="w-2/12 text-right">रकम / Amount</div>
+    </section>
+
+    <!-- Body Rows -->
+    <section
+      class="flex py-2 px-2 text-gray-800 border-b border-gray-200"
+      v-for="(row, index) in doc.items"
+      :key="row.name"
+    >
+      <div class="w-1/12">{{ index + 1 }}</div>
+      <div class="w-4/12">
+        {{ row.item }}
+        <span class="block text-xs text-gray-500" v-if="row.description">
+          {{ row.description }}
+        </span>
+      </div>
+      <div class="w-2/12 text-right" v-if="doc.showHSN">{{ row.hsnCode }}</div>
+      <div class="w-1/12 text-right">
+        <span v-if="row.transferUnit">{{ row.transferUnit }} </span>{{ row.qty
+        }}
+      </div>
+      <div class="w-2/12 text-right">{{ row.rate }}</div>
+      <div class="w-2/12 text-right">{{ row.amount }}</div>
+    </section>
+  </section>
+
+  <!-- Totals -->
+  <section class="px-10 pt-4 text-sm flex justify-end">
+    <div class="w-1/2">
+      <div class="flex justify-between py-1">
+        <span class="text-gray-600">करयोग्य रकम / Taxable Amount</span>
+        <span class="text-gray-900">{{ doc.netTotal }}</span>
+      </div>
+
+      <div
+        class="flex justify-between py-1"
+        v-if="doc.totalDiscount && !doc.discountAfterTax"
+      >
+        <span class="text-gray-600">छूट / Discount</span>
+        <span class="text-gray-900">{{ doc.totalDiscount }}</span>
+      </div>
+
+      <div
+        class="flex justify-between py-1"
+        v-for="tax in doc.taxes"
+        :key="tax.name"
+      >
+        <span class="text-gray-600">{{ tax.account }} ({{ tax.rate }}%)</span>
+        <span class="text-gray-900">{{ tax.amount }}</span>
+      </div>
+
+      <div
+        class="flex justify-between py-1"
+        v-if="doc.totalDiscount && doc.discountAfterTax"
+      >
+        <span class="text-gray-600">छूट / Discount</span>
+        <span class="text-gray-900">{{ doc.totalDiscount }}</span>
+      </div>
+
+      <div
+        class="
+          flex
+          justify-between
+          py-2
+          px-2
+          mt-1
+          text-white
+          font-semibold
+          rounded
+        "
+        :style="{ backgroundColor: print.color }"
+      >
+        <span>कुल रकम / Grand Total</span>
+        <span>{{ doc.grandTotal }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Amount in words -->
+  <section class="px-10 pt-4 text-sm" v-if="print.amountInWords">
+    <span class="text-gray-600 font-semibold">अक्षरुपी / In Words: </span>
+    <span class="text-gray-900">{{ doc.grandTotalInWords }}</span>
+  </section>
+
+  <!-- Notes -->
+  <section class="px-10 pt-6 text-sm" v-if="doc.terms">
+    <h3 class="font-semibold">कैफियत / Notes</h3>
+    <p class="mt-1 whitespace-pre-line text-gray-800">{{ doc.terms }}</p>
+  </section>
+
+  <!-- Terms and Conditions -->
+  <section
+    class="px-10 pt-4 text-sm"
+    v-if="print.displaytermsandconditions && print.termsAndConditions"
+  >
+    <h3 class="font-semibold">नियम तथा सर्तहरू / Terms and Conditions</h3>
+    <p class="mt-1 whitespace-pre-line text-gray-800">
+      {{ print.termsAndConditions }}
+    </p>
+  </section>
+
+  <!-- Signatures -->
+  <footer class="px-10 pt-12 pb-8 text-sm flex justify-between">
+    <div class="text-center">
+      <div class="border-t border-gray-400 w-40 pt-1">
+        प्राप्तकर्ताको दस्तखत
+      </div>
+      <div class="text-xs text-gray-500">Receiver's Signature</div>
+    </div>
+    <div class="text-center">
+      <div class="border-t border-gray-400 w-40 pt-1">
+        अधिकृत व्यक्तिको दस्तखत
+      </div>
+      <div class="text-xs text-gray-500">Authorised Signature</div>
+    </div>
+  </footer>
+</main>

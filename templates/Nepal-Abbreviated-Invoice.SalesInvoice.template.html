@@ -1,0 +1,104 @@
+<main class="bg-white h-full" :style="{ 'font-family': print.font }">
+  <!-- Header -->
+  <header class="px-8 pt-6 text-center">
+    <img
+      v-if="print.displayLogo"
+      class="h-10 mx-auto object-contain mb-2"
+      :src="print.logo"
+    />
+    <p class="font-semibold text-lg" :style="{ color: print.color }">
+      {{ print.companyName }}
+    </p>
+    <p class="text-xs text-gray-700" v-if="print.address">
+      {{ print.links.address.addressDisplay }}
+    </p>
+    <p class="text-xs text-gray-700" v-if="print.phone">{{ print.phone }}</p>
+    <p class="text-xs text-gray-700" v-if="print.pan">PAN: {{ print.pan }}</p>
+    <p class="text-xs text-gray-700" v-if="print.vatNo">
+      VAT: {{ print.vatNo }}
+    </p>
+
+    <p class="mt-3 font-semibold">संक्षिप्त कर बीजक</p>
+    <p class="text-xs text-gray-600">Abbreviated Tax Invoice</p>
+    <div class="border-t border-dashed border-gray-400 mt-2"></div>
+  </header>
+
+  <!-- Meta -->
+  <section class="px-8 pt-3 text-xs">
+    <div class="flex justify-between">
+      <span class="text-gray-500">बीजक नं. / Invoice No.</span>
+      <span class="font-semibold">{{ doc.name }}</span>
+    </div>
+    <div class="flex justify-between mt-1">
+      <span class="text-gray-500">मिति / Date</span>
+      <span>{{ doc.date }} <span v-if="doc.time">{{ doc.time }}</span></span>
+    </div>
+    <div class="flex justify-between mt-1" v-if="doc.party">
+      <span class="text-gray-500">ग्राहक / Customer</span>
+      <span>{{ doc.party }}</span>
+    </div>
+    <div class="border-t border-dashed border-gray-400 mt-2"></div>
+  </section>
+
+  <!-- Items -->
+  <section class="px-8 pt-3 text-xs">
+    <div class="flex font-semibold text-gray-700 pb-1">
+      <div class="w-5/12">विवरण / Item</div>
+      <div class="w-2/12 text-right">परिमाण</div>
+      <div class="w-2/12 text-right">दर</div>
+      <div class="w-3/12 text-right">रकम</div>
+    </div>
+
+    <div
+      class="flex py-1 text-gray-800"
+      v-for="row in doc.items"
+      :key="row.name"
+    >
+      <div class="w-5/12">{{ row.item }}</div>
+      <div class="w-2/12 text-right">{{ row.qty }}</div>
+      <div class="w-2/12 text-right">{{ row.rate }}</div>
+      <div class="w-3/12 text-right">{{ row.amount }}</div>
+    </div>
+
+    <div class="border-t border-dashed border-gray-400 mt-2"></div>
+  </section>
+
+  <!-- Totals -->
+  <section class="px-8 pt-3 text-xs">
+    <div class="flex justify-between py-0.5">
+      <span class="text-gray-600">करयोग्य रकम / Taxable</span>
+      <span>{{ doc.netTotal }}</span>
+    </div>
+    <div
+      class="flex justify-between py-0.5"
+      v-for="tax in doc.taxes"
+      :key="tax.name"
+    >
+      <span class="text-gray-600">{{ tax.account }} ({{ tax.rate }}%)</span>
+      <span>{{ tax.amount }}</span>
+    </div>
+    <div
+      class="
+        flex
+        justify-between
+        py-1
+        mt-1
+        font-semibold
+        border-t border-gray-400
+      "
+    >
+      <span>कुल रकम / Total</span>
+      <span>{{ doc.grandTotal }}</span>
+    </div>
+  </section>
+
+  <!-- Words -->
+  <section class="px-8 pt-3 text-xs" v-if="print.amountInWords">
+    <span class="text-gray-600 font-semibold">अक्षरुपी: </span>
+    <span>{{ doc.grandTotalInWords }}</span>
+  </section>
+
+  <footer class="px-8 pt-6 pb-6 text-center text-xs text-gray-500">
+    धन्यवाद / Thank you
+  </footer>
+</main>
