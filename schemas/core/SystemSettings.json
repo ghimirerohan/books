@@ -49,6 +49,25 @@
       "section": "Default"
     },
     {
+      "fieldname": "calendarSystem",
+      "label": "Calendar System",
+      "fieldtype": "Select",
+      "options": [
+        {
+          "label": "Gregorian (AD)",
+          "value": "Gregorian"
+        },
+        {
+          "label": "Bikram Sambat (BS)",
+          "value": "Bikram Sambat"
+        }
+      ],
+      "default": "Gregorian",
+      "required": true,
+      "description": "Sets the calendar used to display and pick dates. Dates are always stored as Gregorian internally.",
+      "section": "Default"
+    },
+    {
       "fieldname": "hideGetStarted",
       "label": "Hide Get Started",
       "fieldtype": "Check",
@@ -153,6 +172,7 @@
   "quickEditFields": [
     "locale",
     "dateFormat",
+    "calendarSystem",
     "currency",
     "displayPrecision",
     "hideGetStarted"

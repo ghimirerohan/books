@@ -133,12 +133,19 @@ async function updateSystemSettings(
   const systemSettings = await fyo.doc.getDoc('SystemSettings');
   const instanceId = getRandomString();
 
-  await systemSettings.setAndSync({
+  const systemSettingsValues: Record<string, unknown> = {
     locale,
     currency,
     instanceId,
     countryCode,
-  });
+  };
+
+  // Default Nepal to the Bikram Sambat calendar.
+  if (countryCode === 'np') {
+    systemSettingsValues.calendarSystem = 'Bikram Sambat';
+  }
+
+  await systemSettings.setAndSync(systemSettingsValues);
 }
 
 async function createCurrencyRecords(fyo: Fyo) {

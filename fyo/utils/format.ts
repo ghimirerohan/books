@@ -10,6 +10,17 @@ import {
   DEFAULT_DISPLAY_PRECISION,
   DEFAULT_LOCALE,
 } from './consts';
+import { formatBs } from './nepaliDate';
+
+function isBikramSambat(fyo: Fyo): boolean {
+  return fyo.singles.SystemSettings?.calendarSystem === 'Bikram Sambat';
+}
+
+function useDevanagari(fyo: Fyo): boolean {
+  const locale =
+    (fyo.singles.SystemSettings?.locale as string) ?? DEFAULT_LOCALE;
+  return locale.toLowerCase().startsWith('ne');
+}
 
 export function format(
   value: unknown,
@@ -74,8 +85,17 @@ function formatDatetime(value: unknown, fyo: Fyo): string {
   const dateFormat =
     (fyo.singles.SystemSettings?.dateFormat as string) ?? DEFAULT_DATE_FORMAT;
   const dateTime = toDatetime(value);
-  if (!dateTime) {
+  if (!dateTime || !dateTime.isValid) {
     return '';
+  }
+
+  if (isBikramSambat(fyo)) {
+    const bsDate = formatBs(
+      dateTime.toJSDate(),
+      dateFormat,
+      useDevanagari(fyo)
+    );
+    return `${bsDate} ${dateTime.toFormat('HH:mm:ss')}`;
   }
 
   const formattedDatetime = dateTime.toFormat(`${dateFormat} HH:mm:ss`);
@@ -96,8 +116,12 @@ function formatDate(value: unknown, fyo: Fyo): string {
     (fyo.singles.SystemSettings?.dateFormat as string) ?? DEFAULT_DATE_FORMAT;
 
   const dateTime = toDatetime(value);
-  if (!dateTime) {
+  if (!dateTime || !dateTime.isValid) {
     return '';
+  }
+
+  if (isBikramSambat(fyo)) {
+    return formatBs(dateTime.toJSDate(), dateFormat, useDevanagari(fyo));
   }
 
   const formattedDate = dateTime.toFormat(dateFormat);

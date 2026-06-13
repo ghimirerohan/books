@@ -4,6 +4,7 @@ import { FormulaMap, ListsMap, ValidationMap } from 'fyo/model/types';
 import { validateEmail } from 'fyo/model/validationFunction';
 import { DateTime } from 'luxon';
 import { getCountryInfo, getFiscalYear } from 'utils/misc';
+import { bsFiscalYearToAdRange, getBsFiscalYear } from 'fyo/utils/nepaliDate';
 
 function getCurrencyList(): { countryCode: string; name: string }[] {
   const result: { countryCode: string; name: string }[] = [];
@@ -78,6 +79,11 @@ export class SetupWizard extends Doc {
           return;
         }
 
+        if (this.country === 'Nepal') {
+          const startBsYear = getBsFiscalYear(new Date());
+          return bsFiscalYearToAdRange(startBsYear).start;
+        }
+
         const countryInfo = getCountryInfo();
         const fyStart =
           countryInfo[this.country as string]?.fiscal_year_start ?? '';
@@ -100,6 +106,11 @@ export class SetupWizard extends Doc {
 
         if (!this.country) {
           return;
+        }
+
+        if (this.country === 'Nepal') {
+          const startBsYear = getBsFiscalYear(new Date());
+          return bsFiscalYearToAdRange(startBsYear).end;
         }
 
         const countryInfo = getCountryInfo();
