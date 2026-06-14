@@ -138,7 +138,10 @@ export async function getRegionalModels(
     const { Address } = await import('./regionalModels/np/Address');
     const { Party } = await import('./regionalModels/np/Party');
     const { SalesInvoice } = await import('./regionalModels/np/SalesInvoice');
-    return { Address, Party, SalesInvoice };
+    const { AccountingSettings } = await import(
+      './regionalModels/np/AccountingSettings'
+    );
+    return { Address, Party, SalesInvoice, AccountingSettings };
   }
 
   return {};
