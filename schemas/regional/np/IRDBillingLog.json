@@ -1,0 +1,92 @@
+{
+  "name": "IRDBillingLog",
+  "label": "IRD Billing Log",
+  "naming": "manual",
+  "isSingle": false,
+  "isChild": false,
+  "isSubmittable": false,
+  "fields": [
+    {
+      "fieldname": "name",
+      "label": "Invoice No.",
+      "fieldtype": "Data",
+      "required": true,
+      "readOnly": true
+    },
+    {
+      "fieldname": "fiscalYear",
+      "label": "Fiscal Year",
+      "fieldtype": "Data",
+      "readOnly": true
+    },
+    {
+      "fieldname": "billDate",
+      "label": "Bill Date (BS)",
+      "fieldtype": "Data",
+      "readOnly": true
+    },
+    {
+      "fieldname": "party",
+      "label": "Buyer",
+      "fieldtype": "Data",
+      "readOnly": true
+    },
+    {
+      "fieldname": "buyerPan",
+      "label": "Buyer PAN",
+      "fieldtype": "Data",
+      "readOnly": true
+    },
+    {
+      "fieldname": "taxableAmount",
+      "label": "Taxable Amount",
+      "fieldtype": "Currency",
+      "readOnly": true
+    },
+    {
+      "fieldname": "vatAmount",
+      "label": "VAT",
+      "fieldtype": "Currency",
+      "readOnly": true
+    },
+    {
+      "fieldname": "totalAmount",
+      "label": "Total",
+      "fieldtype": "Currency",
+      "readOnly": true
+    },
+    {
+      "fieldname": "isRealtime",
+      "label": "Real-time",
+      "fieldtype": "Check",
+      "readOnly": true
+    },
+    {
+      "fieldname": "cbmsStatus",
+      "label": "CBMS Status",
+      "fieldtype": "Select",
+      "default": "Not Synced",
+      "options": [
+        { "value": "Not Synced", "label": "Not Synced" },
+        { "value": "Synced", "label": "Synced" },
+        { "value": "Failed", "label": "Failed" },
+        { "value": "Disabled", "label": "Disabled" }
+      ],
+      "readOnly": true
+    },
+    {
+      "fieldname": "syncedAt",
+      "label": "Synced At",
+      "fieldtype": "Datetime",
+      "readOnly": true
+    },
+    {
+      "fieldname": "cbmsResponse",
+      "label": "CBMS Response",
+      "fieldtype": "Text",
+      "readOnly": true
+    }
+  ],
+  "titleField": "name",
+  "keywordFields": ["name", "party", "buyerPan"]
+}

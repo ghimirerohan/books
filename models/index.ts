@@ -137,7 +137,8 @@ export async function getRegionalModels(
   if (countryCode === 'np') {
     const { Address } = await import('./regionalModels/np/Address');
     const { Party } = await import('./regionalModels/np/Party');
-    return { Address, Party };
+    const { SalesInvoice } = await import('./regionalModels/np/SalesInvoice');
+    return { Address, Party, SalesInvoice };
   }
 
   return {};

@@ -130,6 +130,7 @@ export default defineComponent({
         ModelNameEnum.Defaults,
         ModelNameEnum.POSSettings,
         ModelNameEnum.ERPNextSyncSettings,
+        ModelNameEnum.IRDSettings,
         ModelNameEnum.PrintSettings,
         ModelNameEnum.SystemSettings,
       ].some((s) => this.fyo.singles[s]?.canSave);
@@ -150,6 +151,7 @@ export default defineComponent({
         [ModelNameEnum.Defaults]: this.t`Defaults`,
         [ModelNameEnum.POSSettings]: this.t`POS Settings`,
         [ModelNameEnum.ERPNextSyncSettings]: this.t`ERPNext Sync`,
+        [ModelNameEnum.IRDSettings]: this.t`IRD / CBMS`,
         [ModelNameEnum.SystemSettings]: this.t`System`,
       };
     },
@@ -159,6 +161,7 @@ export default defineComponent({
       const enablePOS = !!this.fyo.singles.InventorySettings?.enablePointOfSale;
       const enableERPNextSync =
         !!this.fyo.singles.AccountingSettings?.enableERPNextSync;
+      const hasIRDSettings = !!this.fyo.schemaMap[ModelNameEnum.IRDSettings];
 
       return [
         ModelNameEnum.AccountingSettings,
@@ -166,6 +169,7 @@ export default defineComponent({
         ModelNameEnum.Defaults,
         ModelNameEnum.POSSettings,
         ModelNameEnum.ERPNextSyncSettings,
+        ModelNameEnum.IRDSettings,
         ModelNameEnum.PrintSettings,
         ModelNameEnum.SystemSettings,
       ]
@@ -179,6 +183,10 @@ export default defineComponent({
           }
 
           if (s === ModelNameEnum.ERPNextSyncSettings && !enableERPNextSync) {
+            return false;
+          }
+
+          if (s === ModelNameEnum.IRDSettings && !hasIRDSettings) {
             return false;
           }
 

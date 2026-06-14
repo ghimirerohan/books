@@ -57,6 +57,12 @@ function getRegionalSidebar(): SidebarRoot[] {
             name: 'tds-report',
             route: '/report/TDSReport',
           },
+          {
+            label: t`IRD Billing Log`,
+            name: 'ird-billing-log',
+            route: `/list/IRDBillingLog/${t`IRD Billing Log`}`,
+            schemaName: 'IRDBillingLog',
+          },
         ],
       },
     ];

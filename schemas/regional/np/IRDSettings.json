@@ -1,0 +1,71 @@
+{
+  "name": "IRDSettings",
+  "label": "IRD / CBMS Settings",
+  "isSingle": true,
+  "isChild": false,
+  "isSubmittable": false,
+  "fields": [
+    {
+      "fieldname": "cbmsEnabled",
+      "label": "Enable CBMS Real-time Billing",
+      "fieldtype": "Check",
+      "default": false,
+      "description": "When off, no data is sent to the IRD. Turn on only after your billing software is registered with the Inland Revenue Department and you have CBMS credentials.",
+      "section": "Default"
+    },
+    {
+      "fieldname": "syncOnSubmit",
+      "label": "Sync Invoices on Submit",
+      "fieldtype": "Check",
+      "default": true,
+      "description": "Automatically push each sales invoice to the CBMS when it is submitted (only applies when CBMS is enabled).",
+      "section": "Default"
+    },
+    {
+      "fieldname": "environment",
+      "label": "Environment",
+      "fieldtype": "Select",
+      "default": "Test",
+      "options": [
+        { "value": "Test", "label": "Test" },
+        { "value": "Production", "label": "Production" }
+      ],
+      "section": "Credentials"
+    },
+    {
+      "fieldname": "sellerPan",
+      "label": "Seller PAN",
+      "fieldtype": "Data",
+      "placeholder": "123456789",
+      "section": "Credentials"
+    },
+    {
+      "fieldname": "username",
+      "label": "CBMS Username",
+      "fieldtype": "Data",
+      "section": "Credentials"
+    },
+    {
+      "fieldname": "password",
+      "label": "CBMS Password",
+      "fieldtype": "Secret",
+      "section": "Credentials"
+    },
+    {
+      "fieldname": "apiUrl",
+      "label": "CBMS API URL",
+      "fieldtype": "Data",
+      "placeholder": "https://cbapi.ird.gov.np/api/bill",
+      "section": "Credentials"
+    }
+  ],
+  "quickEditFields": [
+    "cbmsEnabled",
+    "syncOnSubmit",
+    "environment",
+    "sellerPan",
+    "username",
+    "password",
+    "apiUrl"
+  ]
+}
