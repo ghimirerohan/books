@@ -1,6 +1,8 @@
 import {
   amountInWordsIndian,
+  amountInWordsNepali,
   integerToWordsIndian,
+  integerToWordsNepali,
 } from 'fyo/utils/numberWords';
 import test from 'tape';
 
@@ -51,6 +53,28 @@ test('numberWords: amount in words with paisa', function (t) {
     amountInWordsIndian(99.99),
     'Rupees Ninety Nine and Ninety Nine Paisa only',
     'rounding'
+  );
+  t.end();
+});
+
+test('numberWords: Nepali integer scale words', function (t) {
+  t.equal(integerToWordsNepali(0), 'शून्य', '0');
+  t.equal(integerToWordsNepali(1), 'एक', '1');
+  t.equal(integerToWordsNepali(100), 'एक सय', '100');
+  t.equal(integerToWordsNepali(1000), 'एक हजार', '1000');
+  t.equal(integerToWordsNepali(100000), 'एक लाख', '1 lakh');
+  t.equal(integerToWordsNepali(10000000), 'एक करोड', '1 crore');
+  t.equal(integerToWordsNepali(1130), 'एक हजार एक सय तीस', '1130');
+  t.end();
+});
+
+test('numberWords: Nepali amount in words', function (t) {
+  t.equal(amountInWordsNepali(0), 'रुपैयाँ शून्य मात्र', 'zero');
+  t.equal(amountInWordsNepali(100), 'रुपैयाँ एक सय मात्र', 'no paisa');
+  t.equal(
+    amountInWordsNepali(0.5),
+    'रुपैयाँ शून्य र पचास पैसा मात्र',
+    'with paisa'
   );
   t.end();
 });

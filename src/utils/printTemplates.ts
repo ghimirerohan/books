@@ -15,7 +15,12 @@ import {
 import { Money } from 'pesa';
 import { SalesInvoice } from 'models/baseModels/SalesInvoice/SalesInvoice';
 import { Payment } from 'models/baseModels/Payment/Payment';
-import { amountInWordsIndian } from 'fyo/utils/numberWords';
+import {
+  amountInWordsIndian,
+  amountInWordsNepali,
+} from 'fyo/utils/numberWords';
+import { shouldUseDevanagari } from 'fyo/utils/nepaliDate';
+import { DEFAULT_LOCALE } from 'fyo/utils/consts';
 
 export type PrintTemplateHint = {
   [key: string]: string | PrintTemplateHint | PrintTemplateHint[];
@@ -51,11 +56,23 @@ export async function getPrintTemplatePropValues(
   let paymentId;
   let sinvDoc;
 
-  // Nepal spells amounts using the Indian (lakh-crore) numbering system and
-  // prints dates in Bikram Sambat.
+  // Nepal spells amounts using the lakh-crore system and prints dates in
+  // Bikram Sambat. With Devanagari numerals, amount-in-words are in Nepali.
   const isNepal = fyo.singles.SystemSettings?.countryCode === 'np';
-  const inWords = (total: number) =>
-    isNepal ? amountInWordsIndian(total) : getGrandTotalInWords(total);
+  const locale =
+    (fyo.singles.SystemSettings?.locale as string) ?? DEFAULT_LOCALE;
+  const useDevanagari = shouldUseDevanagari(
+    locale,
+    fyo.singles.SystemSettings?.numberSystem
+  );
+  const inWords = (total: number) => {
+    if (!isNepal) {
+      return getGrandTotalInWords(total);
+    }
+    return useDevanagari
+      ? amountInWordsNepali(total)
+      : amountInWordsIndian(total);
+  };
 
   const values: PrintValues = { doc: {}, print: {} };
   values.doc = await getPrintTemplateDocValues(doc);
