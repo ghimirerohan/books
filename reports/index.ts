@@ -6,6 +6,10 @@ import { ProfitAndLoss } from './ProfitAndLoss/ProfitAndLoss';
 import { TrialBalance } from './TrialBalance/TrialBalance';
 import { StockBalance } from './inventory/StockBalance';
 import { StockLedger } from './inventory/StockLedger';
+import { VATSalesBook } from './Nepal/VATSalesBook';
+import { VATPurchaseBook } from './Nepal/VATPurchaseBook';
+import { VATReturn } from './Nepal/VATReturn';
+import { TDSReport } from './Nepal/TDSReport';
 
 export const reports = {
   GeneralLedger,
@@ -16,4 +20,8 @@ export const reports = {
   GSTR2,
   StockLedger,
   StockBalance,
+  VATSalesBook,
+  VATPurchaseBook,
+  VATReturn,
+  TDSReport,
 } as const;

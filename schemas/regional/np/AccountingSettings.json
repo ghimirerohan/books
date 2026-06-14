@@ -1,0 +1,43 @@
+{
+  "name": "AccountingSettings",
+  "fields": [
+    {
+      "fieldname": "pan",
+      "label": "PAN",
+      "fieldtype": "Data",
+      "placeholder": "123456789",
+      "section": "Default"
+    },
+    {
+      "fieldname": "vatNo",
+      "label": "VAT Registration No.",
+      "fieldtype": "Data",
+      "placeholder": "VAT Reg. No.",
+      "section": "Default"
+    },
+    {
+      "fieldname": "businessRegNo",
+      "label": "Business Registration No.",
+      "fieldtype": "Data",
+      "section": "Default"
+    },
+    {
+      "fieldname": "irdOffice",
+      "label": "IRD Office",
+      "fieldtype": "Data",
+      "placeholder": "Inland Revenue Office",
+      "section": "Default"
+    }
+  ],
+  "quickEditFields": [
+    "fullname",
+    "email",
+    "companyName",
+    "country",
+    "currency",
+    "fiscalYearStart",
+    "fiscalYearEnd",
+    "pan",
+    "vatNo"
+  ]
+}

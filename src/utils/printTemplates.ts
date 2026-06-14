@@ -15,6 +15,12 @@ import {
 import { Money } from 'pesa';
 import { SalesInvoice } from 'models/baseModels/SalesInvoice/SalesInvoice';
 import { Payment } from 'models/baseModels/Payment/Payment';
+import {
+  amountInWordsIndian,
+  amountInWordsNepali,
+} from 'fyo/utils/numberWords';
+import { shouldUseDevanagari } from 'fyo/utils/nepaliDate';
+import { DEFAULT_LOCALE } from 'fyo/utils/consts';
 
 export type PrintTemplateHint = {
   [key: string]: string | PrintTemplateHint | PrintTemplateHint[];
@@ -41,7 +47,7 @@ const printSettingsFields = [
   'displaytermsandconditions',
   'termsAndConditions',
 ];
-const accountingSettingsFields = ['gstin', 'taxId'];
+const accountingSettingsFields = ['gstin', 'taxId', 'pan', 'vatNo'];
 
 export async function getPrintTemplatePropValues(
   doc: Doc
@@ -49,6 +55,24 @@ export async function getPrintTemplatePropValues(
   const fyo = doc.fyo;
   let paymentId;
   let sinvDoc;
+
+  // Nepal spells amounts using the lakh-crore system and prints dates in
+  // Bikram Sambat. With Devanagari numerals, amount-in-words are in Nepali.
+  const isNepal = fyo.singles.SystemSettings?.countryCode === 'np';
+  const locale =
+    (fyo.singles.SystemSettings?.locale as string) ?? DEFAULT_LOCALE;
+  const useDevanagari = shouldUseDevanagari(
+    locale,
+    fyo.singles.SystemSettings?.numberSystem
+  );
+  const inWords = (total: number) => {
+    if (!isNepal) {
+      return getGrandTotalInWords(total);
+    }
+    return useDevanagari
+      ? amountInWordsNepali(total)
+      : amountInWordsIndian(total);
+  };
 
   const values: PrintValues = { doc: {}, print: {} };
   values.doc = await getPrintTemplateDocValues(doc);
@@ -84,7 +108,7 @@ export async function getPrintTemplatePropValues(
   }
 
   if (doc.schema.name == ModelNameEnum.Payment) {
-    (values.doc as PrintTemplateData).amountPaidInWords = getGrandTotalInWords(
+    (values.doc as PrintTemplateData).amountPaidInWords = inWords(
       (doc.amountPaid as Money)?.float
     );
   }
@@ -119,11 +143,15 @@ export async function getPrintTemplatePropValues(
   }
   (values.doc as PrintTemplateData).showHSN = showHSN(doc);
 
-  (values.doc as PrintTemplateData).grandTotalInWords = getGrandTotalInWords(
+  (values.doc as PrintTemplateData).grandTotalInWords = inWords(
     ((doc.grandTotal as Money) ?? (doc.amount as Money)).float
   );
 
-  (values.doc as PrintTemplateData).date = getDate(doc.date as string);
+  // For Nepal, format the date via fyo.format so it honours the Bikram Sambat
+  // calendar setting; elsewhere keep the existing short Gregorian format.
+  (values.doc as PrintTemplateData).date = isNepal
+    ? fyo.format(doc.date, FieldTypeEnum.Date)
+    : getDate(doc.date as string);
 
   if (printSettings.displayTime) {
     (values.doc as PrintTemplateData).time = getTime(doc.date as string);

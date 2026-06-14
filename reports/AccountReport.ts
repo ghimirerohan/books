@@ -1,6 +1,7 @@
 import { Fyo, t } from 'fyo';
 import { cloneDeep } from 'lodash';
 import { DateTime } from 'luxon';
+import { bsFiscalYearToAdRange, getBsFiscalYear } from 'fyo/utils/nepaliDate';
 import { AccountRootType } from 'models/baseModels/Account/types';
 import { isCredit } from 'models/helpers';
 import { ModelNameEnum } from 'models/types';
@@ -53,7 +54,13 @@ export abstract class AccountReport extends LedgerReport {
     }
 
     if (this.basedOn === 'Fiscal Year' && !this.toYear) {
-      this.fromYear = DateTime.now().year;
+      // For Nepal the fiscal year is identified by its starting Bikram Sambat
+      // year (e.g. 2082 for FY 2082/83); elsewhere it is the Gregorian year.
+      if (this.fyo.singles.SystemSettings?.countryCode === 'np') {
+        this.fromYear = getBsFiscalYear(new Date());
+      } else {
+        this.fromYear = DateTime.now().year;
+      }
       this.toYear = this.fromYear + 1;
     }
 
@@ -449,6 +456,18 @@ export async function getFiscalEndpoints(
   fromYear: number,
   fyo: Fyo
 ) {
+  // Nepal: fromYear/toYear are Bikram Sambat fiscal-year start years. Compute
+  // the Gregorian range from Shrawan 1 to the following Ashad end.
+  if (fyo.singles.SystemSettings?.countryCode === 'np') {
+    const fromDate = DateTime.fromJSDate(
+      bsFiscalYearToAdRange(fromYear).start
+    ).toISODate();
+    const toDate = DateTime.fromJSDate(
+      bsFiscalYearToAdRange(toYear - 1).end
+    ).toISODate();
+    return { fromDate, toDate };
+  }
+
   const fys = (await fyo.getValue(
     ModelNameEnum.AccountingSettings,
     'fiscalYearStart'

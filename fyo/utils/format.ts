@@ -10,6 +10,18 @@ import {
   DEFAULT_DISPLAY_PRECISION,
   DEFAULT_LOCALE,
 } from './consts';
+import { formatBs, shouldUseDevanagari } from './nepaliDate';
+
+function isBikramSambat(fyo: Fyo): boolean {
+  return fyo.singles.SystemSettings?.calendarSystem === 'Bikram Sambat';
+}
+
+function useDevanagari(fyo: Fyo): boolean {
+  const locale =
+    (fyo.singles.SystemSettings?.locale as string) ?? DEFAULT_LOCALE;
+  const numberSystem = fyo.singles.SystemSettings?.numberSystem;
+  return shouldUseDevanagari(locale, numberSystem);
+}
 
 export function format(
   value: unknown,
@@ -74,8 +86,17 @@ function formatDatetime(value: unknown, fyo: Fyo): string {
   const dateFormat =
     (fyo.singles.SystemSettings?.dateFormat as string) ?? DEFAULT_DATE_FORMAT;
   const dateTime = toDatetime(value);
-  if (!dateTime) {
+  if (!dateTime || !dateTime.isValid) {
     return '';
+  }
+
+  if (isBikramSambat(fyo)) {
+    const bsDate = formatBs(
+      dateTime.toJSDate(),
+      dateFormat,
+      useDevanagari(fyo)
+    );
+    return `${bsDate} ${dateTime.toFormat('HH:mm:ss')}`;
   }
 
   const formattedDatetime = dateTime.toFormat(`${dateFormat} HH:mm:ss`);
@@ -96,8 +117,12 @@ function formatDate(value: unknown, fyo: Fyo): string {
     (fyo.singles.SystemSettings?.dateFormat as string) ?? DEFAULT_DATE_FORMAT;
 
   const dateTime = toDatetime(value);
-  if (!dateTime) {
+  if (!dateTime || !dateTime.isValid) {
     return '';
+  }
+
+  if (isBikramSambat(fyo)) {
+    return formatBs(dateTime.toJSDate(), dateFormat, useDevanagari(fyo));
   }
 
   const formattedDate = dateTime.toFormat(dateFormat);
@@ -170,7 +195,17 @@ function getNumberFormatter(fyo: Fyo) {
     (fyo.singles.SystemSettings?.displayPrecision as number) ??
     DEFAULT_DISPLAY_PRECISION;
 
-  return (fyo.currencyFormatter = Intl.NumberFormat(locale, {
+  // Honour the digit-system preference (Devanagari vs Latin) via the Unicode
+  // numbering-system locale extension. 'Auto' keeps the locale's own digits.
+  const numberSystem = fyo.singles.SystemSettings?.numberSystem;
+  let numberLocale = locale;
+  if (numberSystem === 'Devanagari') {
+    numberLocale = `${locale}-u-nu-deva`;
+  } else if (numberSystem === 'Latin') {
+    numberLocale = `${locale}-u-nu-latn`;
+  }
+
+  return (fyo.currencyFormatter = Intl.NumberFormat(numberLocale, {
     style: 'decimal',
     minimumFractionDigits: display,
   }));

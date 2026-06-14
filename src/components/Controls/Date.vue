@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="relative">
     <div v-if="showLabel" :class="labelClasses">
       {{ df.label }}
     </div>
     <input
-      v-show="showInput"
+      v-show="showInput && !useBs"
       ref="input"
       :class="[inputClasses, containerClasses]"
       :type="inputType"
@@ -17,7 +17,7 @@
       @input="(e) => $emit('input', e)"
     />
     <div
-      v-show="!showInput"
+      v-show="!showInput || useBs"
       class="flex"
       :class="[containerClasses, sizeClasses]"
       tabindex="0"
@@ -45,6 +45,14 @@
         />
       </button>
     </div>
+
+    <!-- Bikram Sambat (Nepali) date picker -->
+    <template v-if="useBs && showBsPicker">
+      <div class="fixed inset-0 z-10" @click="showBsPicker = false" />
+      <div class="absolute z-20 mt-1">
+        <NepaliDatePicker :selected="selectedDate" @select="onBsSelect" />
+      </div>
+    </template>
   </div>
 </template>
 <script lang="ts">
@@ -52,16 +60,32 @@ import { DateTime } from 'luxon';
 import { fyo } from 'src/initFyo';
 import { defineComponent, nextTick } from 'vue';
 import Base from './Base.vue';
+import NepaliDatePicker from './NepaliDatePicker.vue';
 
 export default defineComponent({
   extends: Base,
-  emits: ['input', 'focus'],
+  components: { NepaliDatePicker },
+  emits: ['input', 'focus', 'change'],
   data() {
     return {
       showInput: false,
+      showBsPicker: false,
     };
   },
   computed: {
+    useBs(): boolean {
+      return fyo.singles.SystemSettings?.calendarSystem === 'Bikram Sambat';
+    },
+    selectedDate(): Date | null {
+      let value = this.value;
+      if (typeof value === 'string') {
+        value = new Date(value);
+      }
+      if (value instanceof Date && !Number.isNaN(value.valueOf())) {
+        return value;
+      }
+      return null;
+    },
     inputValue(): string {
       let value = this.value;
       if (typeof value === 'string') {
@@ -129,6 +153,11 @@ export default defineComponent({
         return;
       }
 
+      if (this.useBs) {
+        this.showBsPicker = !this.showBsPicker;
+        return;
+      }
+
       this.showInput = true;
       nextTick(() => {
         this.focus();
@@ -136,6 +165,23 @@ export default defineComponent({
         // @ts-ignore
         this.$refs.input.showPicker();
       });
+    },
+    onBsSelect(date: Date) {
+      let result = date;
+
+      // Preserve the time-of-day for Datetime fields.
+      if (this.inputType === 'datetime-local' && this.selectedDate) {
+        result = new Date(date);
+        result.setHours(
+          this.selectedDate.getHours(),
+          this.selectedDate.getMinutes(),
+          this.selectedDate.getSeconds(),
+          0
+        );
+      }
+
+      this.triggerChange(result);
+      this.showBsPicker = false;
     },
   },
 });

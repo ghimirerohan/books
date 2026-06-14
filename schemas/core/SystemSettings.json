@@ -49,6 +49,25 @@
       "section": "Default"
     },
     {
+      "fieldname": "calendarSystem",
+      "label": "Calendar System",
+      "fieldtype": "Select",
+      "options": [
+        {
+          "label": "Gregorian (AD)",
+          "value": "Gregorian"
+        },
+        {
+          "label": "Bikram Sambat (BS)",
+          "value": "Bikram Sambat"
+        }
+      ],
+      "default": "Gregorian",
+      "required": true,
+      "description": "Sets the calendar used to display and pick dates. Dates are always stored as Gregorian internally.",
+      "section": "Default"
+    },
+    {
       "fieldname": "hideGetStarted",
       "label": "Hide Get Started",
       "fieldtype": "Check",
@@ -99,6 +118,19 @@
       "minvalue": 0,
       "maxvalue": 9,
       "description": "Sets how many digits are shown after the decimal point.",
+      "section": "Number Display"
+    },
+    {
+      "fieldname": "numberSystem",
+      "label": "Numeral System",
+      "fieldtype": "Select",
+      "options": [
+        { "label": "Auto (from locale)", "value": "Auto" },
+        { "label": "Devanagari (०-९)", "value": "Devanagari" },
+        { "label": "Latin (0-9)", "value": "Latin" }
+      ],
+      "default": "Auto",
+      "description": "Digit style used for numbers and dates. Auto follows the locale.",
       "section": "Number Display"
     },
     {
@@ -153,8 +185,10 @@
   "quickEditFields": [
     "locale",
     "dateFormat",
+    "calendarSystem",
     "currency",
     "displayPrecision",
+    "numberSystem",
     "hideGetStarted"
   ]
 }

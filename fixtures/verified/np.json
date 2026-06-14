@@ -1,0 +1,192 @@
+{
+  "countryCode": "np",
+  "name": "Nepal - Chart of Accounts",
+  "tree": {
+    "Application of Funds (Assets)": {
+      "Current Assets": {
+        "Accounts Receivable": {
+          "Debtors": {
+            "isGroup": false,
+            "accountType": "Receivable"
+          }
+        },
+        "Bank Accounts": {
+          "accountType": "Bank",
+          "isGroup": true
+        },
+        "Cash In Hand": {
+          "Cash": {
+            "accountType": "Cash"
+          },
+          "accountType": "Cash"
+        },
+        "Loans and Advances (Assets)": {
+          "Advance to Suppliers": {},
+          "Staff Advances": {},
+          "isGroup": true
+        },
+        "Securities and Deposits": {
+          "Earnest Money": {}
+        },
+        "Stock Assets": {
+          "Stock In Hand": {
+            "accountType": "Stock"
+          },
+          "accountType": "Stock"
+        },
+        "Tax Assets": {
+          "TDS Receivable": {
+            "accountType": "Tax"
+          },
+          "Advance Income Tax": {
+            "accountType": "Tax"
+          },
+          "isGroup": true
+        }
+      },
+      "Fixed Assets": {
+        "Land and Building": {
+          "accountType": "Fixed Asset"
+        },
+        "Plant and Machinery": {
+          "accountType": "Fixed Asset"
+        },
+        "Furniture and Fixtures": {
+          "accountType": "Fixed Asset"
+        },
+        "Office Equipments": {
+          "accountType": "Fixed Asset"
+        },
+        "Computers and Electronics": {
+          "accountType": "Fixed Asset"
+        },
+        "Vehicles": {
+          "accountType": "Fixed Asset"
+        },
+        "Accumulated Depreciation": {
+          "accountType": "Accumulated Depreciation"
+        }
+      },
+      "Investments": {
+        "isGroup": true
+      },
+      "Temporary Accounts": {
+        "Temporary Opening": {
+          "accountType": "Temporary"
+        }
+      },
+      "rootType": "Asset"
+    },
+    "Expenses": {
+      "Direct Expenses": {
+        "Stock Expenses": {
+          "Cost of Goods Sold": {
+            "accountType": "Cost of Goods Sold"
+          },
+          "Expenses Included In Valuation": {
+            "accountType": "Expenses Included In Valuation"
+          },
+          "Stock Adjustment": {
+            "accountType": "Stock Adjustment"
+          }
+        }
+      },
+      "Indirect Expenses": {
+        "Administrative Expenses": {},
+        "Commission on Sales": {},
+        "Depreciation": {
+          "accountType": "Depreciation"
+        },
+        "Entertainment Expenses": {},
+        "Freight and Forwarding Charges": {
+          "accountType": "Chargeable"
+        },
+        "Fuel and Transportation": {},
+        "Legal and Professional Charges": {},
+        "Marketing and Advertising": {},
+        "Miscellaneous Expenses": {},
+        "Office Maintenance Expenses": {},
+        "Office Rent": {},
+        "Postal and Courier": {},
+        "Print and Stationery": {},
+        "Rounded Off": {
+          "accountType": "Round Off"
+        },
+        "Salary and Wages": {},
+        "Staff Welfare": {},
+        "Telephone and Internet": {},
+        "Travel Expenses": {},
+        "Utility Expenses": {},
+        "Write Off": {},
+        "Exchange Gain/Loss": {},
+        "Gain/Loss on Asset Disposal": {}
+      },
+      "rootType": "Expense"
+    },
+    "Income": {
+      "Direct Income": {
+        "Sales": {
+          "accountType": "Income Account"
+        },
+        "Service": {
+          "accountType": "Income Account"
+        },
+        "accountType": "Income Account"
+      },
+      "Indirect Income": {
+        "Interest Income": {
+          "accountType": "Income Account"
+        },
+        "Other Income": {
+          "accountType": "Income Account"
+        },
+        "accountType": "Income Account",
+        "isGroup": true
+      },
+      "rootType": "Income"
+    },
+    "Source of Funds (Liabilities)": {
+      "Capital Account": {
+        "Capital": {},
+        "Reserves and Surplus": {},
+        "Retained Earnings": {}
+      },
+      "Current Liabilities": {
+        "Accounts Payable": {
+          "Creditors": {
+            "accountType": "Payable"
+          },
+          "Payroll Payable": {}
+        },
+        "Stock Liabilities": {
+          "Stock Received But Not Billed": {
+            "accountType": "Stock Received But Not Billed"
+          }
+        },
+        "Duties and Taxes": {
+          "VAT": {
+            "accountType": "Tax"
+          },
+          "TDS Payable": {
+            "accountType": "Tax"
+          },
+          "Excise Duty": {
+            "accountType": "Tax"
+          },
+          "Customs Duty": {
+            "accountType": "Tax"
+          },
+          "Exempt": {
+            "accountType": "Tax"
+          }
+        },
+        "Loans (Liabilities)": {
+          "Secured Loans": {},
+          "Unsecured Loans": {},
+          "Bank Overdraft Account": {}
+        }
+      },
+      "rootType": "Liability"
+    }
+  }
+}

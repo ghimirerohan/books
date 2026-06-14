@@ -38,6 +38,8 @@ export enum ModelNameEnum {
   CouponCode = 'CouponCode',
   IntegrationErrorLog = 'IntegrationErrorLog',
   AppliedCouponCodes = 'AppliedCouponCodes',
+  IRDSettings = 'IRDSettings',
+  IRDBillingLog = 'IRDBillingLog',
   Payment = 'Payment',
   PaymentMethod = 'PaymentMethod',
   PaymentFor = 'PaymentFor',
