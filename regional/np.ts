@@ -142,3 +142,11 @@ export const localLevelTypes = [
   'Municipality',
   'Rural Municipality',
 ] as const;
+
+/**
+ * A Nepali PAN (Permanent Account Number) / VAT registration number is a
+ * 9-digit number issued by the Inland Revenue Department.
+ */
+export function isValidPan(pan: string): boolean {
+  return /^\d{9}$/.test(pan);
+}
