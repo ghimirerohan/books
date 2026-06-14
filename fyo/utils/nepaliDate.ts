@@ -85,6 +85,24 @@ export function toDevanagariDigits(value: string): string {
 }
 
 /**
+ * Decides whether Devanagari numerals / Nepali names should be used, given the
+ * locale and the optional `numberSystem` override ('Auto' | 'Devanagari' |
+ * 'Latin'). 'Auto' falls back to the locale (Nepali locales use Devanagari).
+ */
+export function shouldUseDevanagari(
+  locale: string,
+  numberSystem?: string
+): boolean {
+  if (numberSystem === 'Devanagari') {
+    return true;
+  }
+  if (numberSystem === 'Latin') {
+    return false;
+  }
+  return (locale ?? '').toLowerCase().startsWith('ne');
+}
+
+/**
  * Translates an app (Luxon) date format string to the token syntax used by
  * `nepali-date-converter`. Only the day/month/year tokens used by the app's
  * configurable date formats are mapped.

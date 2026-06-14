@@ -9,6 +9,7 @@ import { getCountryInfo } from 'utils/misc';
 export default class SystemSettings extends Doc {
   dateFormat?: string;
   calendarSystem?: string;
+  numberSystem?: string;
   locale?: string;
   displayPrecision?: number;
   internalPrecision?: number;

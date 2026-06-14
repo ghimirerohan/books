@@ -121,6 +121,19 @@
       "section": "Number Display"
     },
     {
+      "fieldname": "numberSystem",
+      "label": "Numeral System",
+      "fieldtype": "Select",
+      "options": [
+        { "label": "Auto (from locale)", "value": "Auto" },
+        { "label": "Devanagari (०-९)", "value": "Devanagari" },
+        { "label": "Latin (0-9)", "value": "Latin" }
+      ],
+      "default": "Auto",
+      "description": "Digit style used for numbers and dates. Auto follows the locale.",
+      "section": "Number Display"
+    },
+    {
       "fieldname": "currency",
       "label": "Currency",
       "fieldtype": "AutoComplete",
@@ -175,6 +188,7 @@
     "calendarSystem",
     "currency",
     "displayPrecision",
+    "numberSystem",
     "hideGetStarted"
   ]
 }

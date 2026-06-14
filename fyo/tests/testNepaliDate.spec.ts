@@ -7,6 +7,7 @@ import {
   formatBs,
   getBsFiscalYear,
   luxonToBsFormat,
+  shouldUseDevanagari,
   toDevanagariDigits,
 } from 'fyo/utils/nepaliDate';
 import test from 'tape';
@@ -64,6 +65,18 @@ test('nepaliDate: format token translation', function (t) {
   t.equal(luxonToBsFormat('dd/MM/yyyy'), 'DD/MM/YYYY', 'dd/MM/yyyy');
   t.equal(luxonToBsFormat('MMM d, y'), 'MMM D, YYYY', 'MMM d, y');
   t.equal(luxonToBsFormat('yyyy-MM-dd'), 'YYYY-MM-DD', 'yyyy-MM-dd');
+  t.end();
+});
+
+test('nepaliDate: devanagari preference', function (t) {
+  t.equal(shouldUseDevanagari('ne-NP'), true, 'ne locale -> devanagari');
+  t.equal(shouldUseDevanagari('en-US'), false, 'en locale -> latin');
+  t.equal(
+    shouldUseDevanagari('en-US', 'Devanagari'),
+    true,
+    'override to devanagari'
+  );
+  t.equal(shouldUseDevanagari('ne-NP', 'Latin'), false, 'override to latin');
   t.end();
 });
 

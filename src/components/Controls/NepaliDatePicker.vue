@@ -101,6 +101,7 @@ import {
   bsWeekdaysEn,
   bsWeekdaysNp,
   daysInBsMonth,
+  shouldUseDevanagari,
   toDevanagariDigits,
 } from 'fyo/utils/nepaliDate';
 import { defineComponent, PropType } from 'vue';
@@ -125,7 +126,10 @@ export default defineComponent({
     useDevanagari(): boolean {
       const locale =
         (fyo.singles.SystemSettings?.locale as string) ?? DEFAULT_LOCALE;
-      return locale.toLowerCase().startsWith('ne');
+      const numberSystem = fyo.singles.SystemSettings?.numberSystem as
+        | string
+        | undefined;
+      return shouldUseDevanagari(locale, numberSystem);
     },
     monthNames(): string[] {
       return this.useDevanagari ? bsMonthsNp : bsMonthsEn;

@@ -10,7 +10,7 @@ import {
   DEFAULT_DISPLAY_PRECISION,
   DEFAULT_LOCALE,
 } from './consts';
-import { formatBs } from './nepaliDate';
+import { formatBs, shouldUseDevanagari } from './nepaliDate';
 
 function isBikramSambat(fyo: Fyo): boolean {
   return fyo.singles.SystemSettings?.calendarSystem === 'Bikram Sambat';
@@ -19,7 +19,8 @@ function isBikramSambat(fyo: Fyo): boolean {
 function useDevanagari(fyo: Fyo): boolean {
   const locale =
     (fyo.singles.SystemSettings?.locale as string) ?? DEFAULT_LOCALE;
-  return locale.toLowerCase().startsWith('ne');
+  const numberSystem = fyo.singles.SystemSettings?.numberSystem;
+  return shouldUseDevanagari(locale, numberSystem);
 }
 
 export function format(
@@ -194,7 +195,17 @@ function getNumberFormatter(fyo: Fyo) {
     (fyo.singles.SystemSettings?.displayPrecision as number) ??
     DEFAULT_DISPLAY_PRECISION;
 
-  return (fyo.currencyFormatter = Intl.NumberFormat(locale, {
+  // Honour the digit-system preference (Devanagari vs Latin) via the Unicode
+  // numbering-system locale extension. 'Auto' keeps the locale's own digits.
+  const numberSystem = fyo.singles.SystemSettings?.numberSystem;
+  let numberLocale = locale;
+  if (numberSystem === 'Devanagari') {
+    numberLocale = `${locale}-u-nu-deva`;
+  } else if (numberSystem === 'Latin') {
+    numberLocale = `${locale}-u-nu-latn`;
+  }
+
+  return (fyo.currencyFormatter = Intl.NumberFormat(numberLocale, {
     style: 'decimal',
     minimumFractionDigits: display,
   }));
