@@ -27,6 +27,41 @@ function getFilteredSidebar(sideBar: SidebarConfig): SidebarConfig {
 }
 
 function getRegionalSidebar(): SidebarRoot[] {
+  const countryCode = fyo.singles.SystemSettings?.countryCode;
+
+  if (countryCode === 'np') {
+    return [
+      {
+        label: t`VAT & Tax`,
+        name: 'vat-tax',
+        icon: 'gst',
+        route: '/report/VATReturn',
+        items: [
+          {
+            label: t`VAT Return`,
+            name: 'vat-return',
+            route: '/report/VATReturn',
+          },
+          {
+            label: t`VAT Sales Book`,
+            name: 'vat-sales-book',
+            route: '/report/VATSalesBook',
+          },
+          {
+            label: t`VAT Purchase Book`,
+            name: 'vat-purchase-book',
+            route: '/report/VATPurchaseBook',
+          },
+          {
+            label: t`TDS Report`,
+            name: 'tds-report',
+            route: '/report/TDSReport',
+          },
+        ],
+      },
+    ];
+  }
+
   const hasGstin = !!fyo.singles?.AccountingSettings?.gstin;
   if (!hasGstin) {
     return [];

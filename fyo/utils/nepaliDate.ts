@@ -175,3 +175,16 @@ export function bsFiscalYearLabel(startBsYear: number): string {
   const next = String((startBsYear + 1) % 100).padStart(2, '0');
   return `${startBsYear}/${next}`;
 }
+
+/**
+ * Returns the AD start (1st) and end (last day) of a given BS month.
+ * Useful for monthly statutory periods such as the VAT return.
+ */
+export function bsMonthToAdRange(
+  year: number,
+  month: number
+): { start: Date; end: Date } {
+  const start = bsToAd(year, month, 1);
+  const end = bsToAd(year, month, daysInBsMonth(year, month));
+  return { start, end };
+}

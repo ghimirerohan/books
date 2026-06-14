@@ -2,6 +2,7 @@ import {
   adToBs,
   bsFiscalYearLabel,
   bsFiscalYearToAdRange,
+  bsMonthToAdRange,
   bsToAd,
   formatBs,
   getBsFiscalYear,
@@ -48,6 +49,14 @@ test('nepaliDate: fiscal year AD range and label', function (t) {
   t.equal(ymd(range.start), '2025-07-17', 'FY 2082/83 start');
   t.equal(ymd(range.end), '2026-07-16', 'FY 2082/83 end');
   t.equal(bsFiscalYearLabel(2081), '2081/82', 'label');
+  t.end();
+});
+
+test('nepaliDate: BS month to AD range', function (t) {
+  // Shrawan 2081 ran 2024-07-16 .. 2024-08-16 (32 days).
+  const range = bsMonthToAdRange(2081, 4);
+  t.equal(ymd(range.start), '2024-07-16', 'Shrawan 2081 start');
+  t.equal(ymd(range.end), '2024-08-16', 'Shrawan 2081 end');
   t.end();
 });
 
